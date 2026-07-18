@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エリース サッカー上達ノート</title>
+<style>
+  :root{
+    --maroon:#7a1428;
+    --maroon-dark:#5c0f1e;
+    --gold:#c9a24d;
+    --gold-light:#e8d6a8;
+    --bg:#faf7f2;
+    --card-bg:#ffffff;
+    --text:#2a2320;
+    --muted:#7a6f68;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:linear-gradient(135deg,var(--maroon),var(--maroon-dark));
+    color:#fff;
+    padding:18px 20px;
+    position:sticky;
+    top:0;
+    z-index:10;
+    box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  }
+  .header-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .logo{width:52px;height:52px;flex-shrink:0;}
+  .site-title{font-size:1.15rem;font-weight:700;letter-spacing:0.02em;}
+  .site-sub{font-size:0.72rem;color:var(--gold-light);margin-top:2px;}
+  .search-wrap{
+    max-width:1100px;
+    margin:14px auto 0;
+    display:flex;
+    gap:8px;
+  }
+  #searchBox{
+    flex:1;
+    padding:9px 14px;
+    border-radius:20px;
+    border:none;
+    font-size:0.9rem;
+    outline:none;
+  }
+  nav{
+    max-width:1100px;
+    margin:12px auto 0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  nav button{
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    color:#fff;
+    padding:6px 14px;
+    border-radius:16px;
+    font-size:0.8rem;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  nav button:hover{background:rgba(255,255,255,0.25);}
+  nav button.active{background:var(--gold);border-color:var(--gold);color:var(--maroon-dark);font-weight:700;}
+
+  main{max-width:1100px;margin:0 auto;padding:20px 16px 60px;}
+  .category-block{margin-bottom:44px;}
+  .category-title{
+    font-size:1.4rem;
+    font-weight:700;
+    color:var(--maroon);
+    border-bottom:3px solid var(--gold);
+    padding-bottom:6px;
+    margin-bottom:6px;
+  }
+  .category-desc{color:var(--muted);font-size:0.85rem;margin-bottom:18px;}
+  .subheading{
+    font-size:1.02rem;
+    font-weight:700;
+    color:var(--maroon-dark);
+    margin:22px 0 10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .subheading .num{
+    background:var(--maroon);
+    color:#fff;
+    border-radius:50%;
+    width:24px;height:24px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.8rem;
+  }
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--card-bg);
+    border:1px solid #eee2d0;
+    border-radius:12px;
+    padding:16px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.05);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .card-type{
+    font-size:0.68rem;
+    font-weight:700;
+    color:var(--maroon);
+    background:var(--gold-light);
+    display:inline-block;
+    padding:2px 9px;
+    border-radius:10px;
+    width:fit-content;
+  }
+  .card-title{font-size:1rem;font-weight:700;line-height:1.4;}
+  .card ul{margin:0;padding-left:1.1em;font-size:0.85rem;line-height:1.6;color:var(--text);}
+  .card .source{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+  .card .source a{color:var(--maroon);text-decoration:none;}
+  .card .source a:hover{text-decoration:underline;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
+  .tag{
+    font-size:0.68rem;
+    background:#f1e6d2;
+    color:var(--maroon-dark);
+    border-radius:10px;
+    padding:2px 9px;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+  .tag:hover{border-color:var(--maroon);}
+  .embed-wrap{position:relative;padding-top:56.25%;height:0;overflow:hidden;border-radius:8px;}
+  .embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+  .empty-msg{
+    color:var(--muted);
+    font-size:0.9rem;
+    background:#fff;
+    border:1px dashed #ddcfb8;
+    border-radius:10px;
+    padding:20px;
+    text-align:center;
+  }
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.75rem;
+    padding:20px;
+  }
+  .hidden{display:none !important;}
+  #noResult{display:none;text-align:center;color:var(--muted);padding:40px 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="var(--gold)"/>
+      <circle cx="50" cy="50" r="42" fill="#b21f34"/>
+      <path d="M28 34 C18 30, 14 42, 20 52 C24 46, 30 44, 34 46" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M72 34 C82 30, 86 42, 80 52 C76 46, 70 44, 66 46" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M34 46 C40 60, 44 68, 50 74 C56 68, 60 60, 66 46" fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round"/>
+      <text x="50" y="20" text-anchor="middle" font-size="10" fill="var(--gold)" font-weight="700" font-family="Arial">aries TOKYO</text>
+    </svg>
+    <div>
+      <div class="site-title">エリース サッカー上達ノート</div>
+      <div class="site-sub">息子のパフォーマンス向上のための情報まとめ</div>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="searchBox" placeholder="キーワードで検索（例：ドリブル、判断力 など）">
+  </div>
+  <nav id="tabNav"></nav>
+</header>
+
+<main id="main"></main>
+
+<footer>
+  個人・家族利用のための非公開まとめサイトです。掲載内容は各情報源に著作権があります。
+</footer>
+
+<script>
+const CATEGORIES = [
+  {id:"rinen", name:"エリースの理念", desc:"クラブの理念・プレースタイル・生活面の心構え（入団説明会資料より）"},
+  {id:"kihon", name:"サッカーの基本", desc:"認知・判断・行動の基礎フレームワークと、止める・蹴る・運ぶ・受ける・外すの技術"},
+  {id:"physical", name:"フィジカル", desc:"体の使い方・運動能力向上のための参考情報"},
+  {id:"ball", name:"ボールフィーリング", desc:"準備中（今後、参考情報を追加予定）"},
+  {id:"kojin", name:"個人戦術", desc:"オフェンス・ディフェンスそれぞれの優先順位と判断"},
+  {id:"team", name:"チーム戦術", desc:"ラインコントロールやチームとしての連動"},
+  {id:"mental", name:"メンタル", desc:"成長マインドセットと目標設定の考え方"}
+];
+
+const CARDS = [
+  // ===== エリースの理念 =====
+  {cat:"rinen", sub:"① 理念・人間力", tags:["理念"], type:"理念資料", title:"ariesの理念「人」そのもの",
+   points:["「人」を何よりも大切にする。サッカーの技術だけでなく人間力を育てることを重視","年齢やカテゴリーを越えて、強い絆で結ばれたメンバー同士のエネルギーがariesの原動力"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"① 理念・人間力", tags:["理念"], type:"理念資料", title:"FRA理念（Fair Play / Respect / Appreciation）",
+   points:["Fair Play＝フェアプレー","Respect＝リスペクト","Appreciation＝感謝","ジュニアからシニアまで、ariesの全カテゴリーが遵守する理念"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"① 理念・人間力", tags:["理念"], type:"理念資料", title:"サッカーは未来を生き抜く人間力を育てる最高のスポーツ",
+   points:["正解が一つではないこと、状況が変わり続けること、仲間と協力すること","辛いこと・苦しいこととの向き合い方、悔しさや怒り・不安との付き合い方を学べる","真剣だからこそ感じるサッカーの素晴らしさ"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"① 理念・人間力", tags:["理念","メンタル"], type:"理念資料", title:"AIとの共存×多様な価値観「求められる力」",
+   points:["自分で考え、選ぶ力／人と関わる力","感情を表現すること／チャレンジすること／情熱を持つこと","空気を読む力・美意識・礼儀正しさ・自己犠牲の精神・ひたむきさ・真面目さ"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"① 理念・人間力", tags:["理念","メンタル"], type:"理念資料", title:"文武不岐（勉強との両立の考え方）",
+   points:["勉強とサッカーどちらも同じくらい本気で取り組む","成績が良ければテストはOK、悪ければNG、という単純な話ではなく、好きなことだけやっていては生きていけないという姿勢そのものを学ぶ"],
+   source:"入団説明会資料（クラブ配布）"},
+
+  {cat:"rinen", sub:"② プレースタイル・試合の心構え", tags:["理念","戦術"], type:"理念資料", title:"Play Vision「Living Football」",
+   points:["ピッチ上で選手自らが考え、判断し、主体的にプレーしながら勝利を目指す","見ている人をワクワクさせる、アグレッシブでチャレンジングなサッカー","時に野性味を爆発させ、感情を心から楽しんでいる状態＝「生きている」ということ"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"② プレースタイル・試合の心構え", tags:["理念","戦術"], type:"理念資料", title:"「全員攻撃・全員守備」というエリースが目指すサッカー",
+   points:["攻守一体の攻撃的サッカーで成長と勝利の両方を掴み取る"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"② プレースタイル・試合の心構え", tags:["注意事項"], type:"理念資料", title:"試合で大切なこと（9項目）",
+   points:["1試合・1分・1プレーを大切に","感謝の気持ちを持ってプレーする","チャレンジする、無くしたものを取り戻すつもりで戦う","常に自分たちのベストパフォーマンスを出す","ルールをしっかり守る","準備をしっかりする"],
+   source:"入団説明会資料（クラブ配布）"},
+
+  {cat:"rinen", sub:"③ 生活・心構え（注意事項）", tags:["注意事項"], type:"理念資料", title:"活動ルール・心構え",
+   points:["練習開始15分前に集合完了","体調管理を自分でする、スケジュール管理をしっかりする","感謝の気持ちを持つ、サッカーを本気で楽しむ"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"③ 生活・心構え（注意事項）", tags:["注意事項","フィジカル"], type:"理念資料", title:"食事・補食について",
+   points:["練習後45分以内の補食は筋肉づくりの重要ポイント","朝食の欠食はNG","栄養バランスを意識し、間食は決まった時間・量に","よく噛んで食べる、水分をしっかり摂る"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"③ 生活・心構え（注意事項）", tags:["注意事項"], type:"理念資料", title:"スマホ・SNS・自転車移動のルール",
+   points:["利用時間の上限を家庭で決める、練習場所にはスマホを持参しない","SNSは投稿範囲・DM対応・個人情報の扱いに注意","自転車の「ながらスマホ」運転は罰則対象。安全運転を徹底"],
+   source:"入団説明会資料（クラブ配布）"},
+  {cat:"rinen", sub:"③ 生活・心構え（注意事項）", tags:["注意事項","メンタル"], type:"理念資料", title:"家族との約束",
+   points:["サッカー＝勉強＝家族関係。どれも大切なこととして両立を目指す","「サッカーを本気でやりたい」という思いを、家族みんなの理解と協力で支える"],
+   source:"入団説明会資料（クラブ配布）"},
+
+  // ===== サッカーの基本 =====
+  {cat:"kihon", tags:["戦術","基本"], type:"技術ノート", title:"認知→判断→行動のフレームワーク",
+   points:["①状況把握（認知）：味方・相手・スペース・ボールの位置を目と声で把握","②判断（思考）：リスクとチャンスのバランスを考えプレーを選択","③行動（実行）：判断に基づき個人技で正確に実行","試合時間の95%前後はボールに触れていない。オフザボールの動きと準備が重要"],
+   source:"サッカーの基本.pptx（toshi作成）"},
+  {cat:"kihon", tags:["戦術","基本"], type:"技術ノート", title:"サッカーに必要な三要素",
+   points:["個人技：フィジカル＋ボールタッチ。全ての土台","個人戦術：個人技を「いつ・どう使うか」の判断","チーム戦術：個人戦術の積み重ねで機能する連動・共通理解","3つの要素は互いに支え合い、成長を加速させる"],
+   source:"サッカーの基本.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","ボールタッチ"], type:"技術ノート", title:"止める",
+   points:["1タッチでボールを完全に静止させ、次に何でもできる「自分の位置」に置く","足の1点とボールの1点をピタリと合わせるイメージ","正確に止められると、相手はこちらの次のプレーが読めず動けなくなる"],
+   source:"サッカー技術大全.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","ボールタッチ"], type:"技術ノート", title:"蹴る",
+   points:["体全体を使い、自分の「点」とボールの「点」を合わせて、受け手の足元の「点」へ最短で届ける","強さだけでなくコースを狙う。ノーステップで振り抜ける自分の位置を見つける"],
+   source:"サッカー技術大全.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","ボールタッチ"], type:"技術ノート", title:"運ぶ",
+   points:["利き足の前か体の中央でボールを縦回転させ、まっすぐ動かす","ボールを追いかけるのではなく、体についてくるイメージで運ぶ"],
+   source:"サッカー技術大全.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","ボールタッチ"], type:"技術ノート", title:"受ける",
+   points:["出し手とボールの間に相手を入れない位置取り（線を引く）をする","できるだけ前向きに、相手ゴール方向を向いて受ける","DFの体の向きによって背中の取り方を変える"],
+   source:"サッカー技術大全.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","戦術"], type:"技術ノート", title:"外す",
+   points:["相手の動き（矢印）の逆を取ってマークを外す","相手とボールが同時に見える位置を取り続ける","足の踏み替え技術で、止まる足を作らないことが重要"],
+   source:"サッカー技術大全.pptx（toshi作成）"},
+  {cat:"kihon", tags:["基本","ボールタッチ"], type:"技術ノート", title:"オフェンスの個人技（ドリブル・トラップ）",
+   points:["ドリブル：ボールは常に両足の中心に置き、押し出すように運ぶ（つま先で蹴らない）","トラップ：相手との距離に応じてスペース／足元を使い分け、ヘソの向きで相手に読ませない"],
+   source:"サッカーノート.pptx（toshi作成）"},
+
+  // ===== フィジカル =====
+  {cat:"physical", tags:["フィジカル"], type:"Instagram", title:"体の使い方改善・ストレッチ（jo_body_link）",
+   points:["元運動音痴のパーソナルトレーナーが教える、股関節・体幹などのコーディネーション運動","腰痛や姿勢の崩れを、体の使い方から見直す内容"],
+   source:{name:"@jo_body_link", url:"https://www.instagram.com/jo_body_link"}},
+  {cat:"physical", tags:["フィジカル"], type:"Instagram", title:"子どもの運動ポテンシャルを高める運動指導（okazunori1080）",
+   points:["健康運動指導士が発信する、育成年代向けの運動能力向上メソッド"],
+   source:{name:"@okazunori1080", url:"https://www.instagram.com/okazunori1080"}},
+  {cat:"physical", tags:["フィジカル","個人戦術","メンタル"], type:"Instagram", title:"脳×体連動トレ・瞬時の判断力UP（hari_kyu_seitai_haridokoro）",
+   points:["身体操作コーチによる、視覚と身体操作を鍛えるトレーニング","「動ける土台」を作りながら、瞬時の判断力向上も狙う内容"],
+   source:{name:"@hari_kyu_seitai_haridokoro", url:"https://www.instagram.com/hari_kyu_seitai_haridokoro"}},
+  {cat:"physical", tags:["基本","個人戦術"], type:"Instagram", title:"小学生向けサッカースクール（kohei.ex.9_9）",
+   points:["元プロサッカー選手によるスクール運営アカウント。技術・戦術を幅広くカバー","投稿ごとにフィジカル／基本／個人戦術いずれかの参考にする"],
+   source:{name:"@kohei.ex.9_9", url:"https://www.instagram.com/kohei.ex.9_9"}},
+  {cat:"physical", tags:["個人戦術","メンタル"], type:"Instagram", title:"サッカーの言語化・判断力（yuya_football）",
+   points:["感覚ではなく言葉でサッカーを伝えるコーチのアカウント","選手・保護者向けに、伸び悩みの原因を言語化する内容"],
+   source:{name:"@yuya_football", url:"https://www.instagram.com/yuya_football"}},
+
+  // ===== 個人戦術 =====
+  {cat:"kojin", tags:["戦術"], type:"技術ノート", title:"オフェンスの優先順位",
+   points:["①シュート：得点を奪う（裏を狙う、ずらして打つ）","②数的優位を作る：ワンツー、スペース活用、クロス","③前進する：縦パス・ドリブルで運ぶ","④ボールを保持する：安全なパスでカウンターを防ぐ"],
+   source:"サッカーノート.pptx（toshi作成）"},
+  {cat:"kojin", tags:["戦術"], type:"技術ノート", title:"ディフェンスの優先順位",
+   points:["①寄せる：相手に時間と選択肢を与えない","②遅らせる：スピードとリズムを止める、抜かれない","③限定する：コースや選択肢を制限する","④奪う：タイミングを見てボールを奪取"],
+   source:"サッカーノート.pptx（toshi作成）"},
+  {cat:"kojin", tags:["戦術","基本"], type:"技術ノート", title:"ディフェンスの個人技（間合い・ステップワーク）",
+   points:["相手に近づくほどステップを小さくして寄せる","横移動が遅い時はサイドステップ、速い時はクロスステップ","ボール奪取は、ボールに近い足・相手とボールの間に入れる足で行う"],
+   source:"サッカーノート.pptx（toshi作成）"},
+
+  // ===== チーム戦術 =====
+  {cat:"team", tags:["戦術"], type:"技術ノート", title:"ラインコントロール",
+   points:["相手がバックパスしたらラインを上げる","相手が後ろ向きに保持していたらラインを保つ","相手が前向きにプレーしている時はラインを下げる"],
+   source:"サッカーノート.pptx（toshi作成）"},
+  {cat:"team", tags:["戦術"], type:"技術ノート", title:"フォローアップ",
+   points:["前にスペースがない場合は下がってパスコースを作る"],
+   source:"サッカーノート.pptx（toshi作成）"},
+
+  // ===== メンタル =====
+  {cat:"mental", tags:["メンタル"], type:"技術ノート", title:"成長に必要なこと（コンフォート／チャレンジゾーン）",
+   points:["コンフォートゾーン：慣れていて簡単に感じる領域。新しいスキルや判断力は育ちにくい","チャレンジゾーン：慣れていない・難しいと感じる領域。挑戦と失敗の繰り返しで成長し、プレッシャーに強くなる"],
+   source:"サッカーノート.pptx（toshi作成）"},
+  {cat:"mental", tags:["メンタル"], type:"技術ノート", title:"自信レベルと内部モデル",
+   points:["自己否定「自分なんて無理だ」→挑戦を避ける","自己肯定感「今の自分ならできる」→挑戦する気持ちが芽生える","自己効力感「未来の自分ならできる」→挑戦と失敗から学ぶ","自己分析で強みと弱みを認識し、努力（練習）なしに成長はない"],
+   source:"サッカーノート.pptx（toshi作成）"},
+  {cat:"mental", tags:["メンタル"], type:"技術ノート", title:"成長のためのプロセス",
+   points:["①目標設定：成長した未来の自分を想像して設定","②行動設定：達成のために必要な改善ポイントを具体化","③分析：達成度合いと、あと何が必要かを分析","④新たな目標設定：達成度に応じて目標を調整し繰り返す"],
+   source:"サッカーノート.pptx（toshi作成）"}
+];
+
+// ---- render ----
+const nav = document.getElementById("tabNav");
+const main = document.getElementById("main");
+let activeCat = "all";
+let activeTag = null;
+
+function makeTabs(){
+  nav.innerHTML = "";
+  const allBtn = document.createElement("button");
+  allBtn.textContent = "すべて";
+  allBtn.className = "active";
+  allBtn.onclick = () => setActiveCat("all", allBtn);
+  nav.appendChild(allBtn);
+  CATEGORIES.forEach(c => {
+    const b = document.createElement("button");
+    b.textContent = c.name;
+    b.onclick = () => setActiveCat(c.id, b);
+    nav.appendChild(b);
+  });
+}
+function setActiveCat(id, btn){
+  activeCat = id;
+  [...nav.children].forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+function setTagFilter(tag){
+  activeTag = (activeTag === tag) ? null : tag;
+  render();
+}
+window.setTagFilter = setTagFilter;
+
+function cardMatchesSearch(card, q){
+  if(!q) return true;
+  const hay = (card.title + " " + card.points.join(" ") + " " + (card.tags||[]).join(" ")).toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render(){
+  const q = document.getElementById("searchBox").value.trim();
+  main.innerHTML = "";
+  const cats = activeCat === "all" ? CATEGORIES : CATEGORIES.filter(c => c.id === activeCat);
+  let totalShown = 0;
+
+  cats.forEach(cat => {
+    let cards = CARDS.filter(c => c.cat === cat.id);
+    if(activeTag) cards = cards.filter(c => (c.tags||[]).includes(activeTag));
+    cards = cards.filter(c => cardMatchesSearch(c, q));
+    if(cards.length === 0 && (q || activeTag)) return;
+
+    const block = document.createElement("div");
+    block.className = "category-block";
+    block.innerHTML = `<div class="category-title">${cat.name}</div><div class="category-desc">${cat.desc}</div>`;
+
+    if(cards.length === 0){
+      block.innerHTML += `<div class="empty-msg">まだ情報がありません。今後追加していきます。</div>`;
+      main.appendChild(block);
+      totalShown++;
+      return;
+    }
+
+    // group by sub if present
+    const subs = [...new Set(cards.map(c => c.sub || null))];
+    subs.forEach(sub => {
+      if(sub){
+        const idx = subs.indexOf(sub) + 1;
+        block.innerHTML += `<div class="subheading"><span class="num">${idx}</span>${sub.replace(/^[①②③]\s*/,"")}</div>`;
+      }
+      const grid = document.createElement("div");
+      grid.className = "card-grid";
+      cards.filter(c => (c.sub||null) === sub).forEach(c => {
+        grid.appendChild(makeCard(c));
+      });
+      block.appendChild(grid);
+    });
+
+    main.appendChild(block);
+    totalShown++;
+  });
+
+  if(totalShown === 0){
+    main.innerHTML = `<div class="empty-msg" style="margin-top:40px;">該当する情報が見つかりませんでした。</div>`;
+  }
+}
+
+function makeCard(c){
+  const div = document.createElement("div");
+  div.className = "card";
+  let sourceHtml = "";
+  if(typeof c.source === "string"){
+    sourceHtml = `<div class="source">出典: ${c.source}</div>`;
+  } else if(c.source){
+    sourceHtml = `<div class="source">出典: <a href="${c.source.url}" target="_blank" rel="noopener">${c.source.name}</a></div>`;
+  }
+  const tagsHtml = (c.tags||[]).map(t => `<span class="tag" onclick="setTagFilter('${t}')">${t}</span>`).join("");
+  div.innerHTML = `
+    <span class="card-type">${c.type}</span>
+    <div class="card-title">${c.title}</div>
+    <ul>${c.points.map(p => `<li>${p}</li>`).join("")}</ul>
+    ${sourceHtml}
+    <div class="tag-row">${tagsHtml}</div>
+  `;
+  return div;
+}
+
+document.getElementById("searchBox").addEventListener("input", render);
+makeTabs();
+render();
+</script>
+</body>
+</html>
